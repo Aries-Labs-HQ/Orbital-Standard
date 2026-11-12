@@ -2,6 +2,18 @@
 
 All accepted and declined changes, with reasons. Newest first.
 
+## v0.4.0 — nesting (registry → collection → piece) + the collection cover
+A new core section, STANDARD §12 Nesting, names three levels and groups collections under a registry by the same two views a collection answers about its pieces. It is a proposal written ahead of an implementation; nothing in it is measured. The DRAFT label stays.
+- **Level 0, piece:** unchanged from v0.3.0 (`998`, `999`, `1000`, `1001`, `1002`).
+- **Level 1, collection:** `instance-of` and `index-of` are unchanged. New: it SHOULD answer `1000`, called with no argument, with its **cover**, and `1001` with the cover's type, from a pointer the deployer sets; the pointer MAY mirror a member piece's `1000` or hold its own bytes. New: it MAY carry a set-once `master`, its registry's id, in `standards`. Reason: an explorer that asks a collection for its image gets one, which is proposal 0001's direction.
+- **Level 2, registry:** the same two views, about collections. It SHOULD answer `1000` with its own cover; it MAY expose aliases for the two views that its profile names; it MAY hold a cover pointer for a member collection that has no `1000` of its own. Reason: a reader that has integrated one level has integrated the next.
+- **Adoption:** a registry MAY adopt, at an index, a collection deployed before it, proven onchain by a transaction that presents that collection's authority token; provenance is then one-way. A collection deployed after its registry SHOULD set `master`, so that provenance runs both ways. Reason: a deployed collection cannot change, and membership is still proven by the parent.
+- **Wallet guidance and recursion (informative):** group pieces by `998` and collections by the registry's `index-of`; show each node's own `1000`, falling back to the registry's cover pointer; prove membership from the parent down, never from a claim upward. A registry may be a member of a higher registry; artist → release → track is the media example.
+- **Conformance:** a v0.3.0 collection without a `1000` of its own remains conformant, because the cover SHOULD is new. §12 lists what a v0.3.0 collection lacks.
+- **Profile 1:** one line. A collection cover that mirrors a member piece is that piece's `1000`, byte-for-byte.
+- **Open question:** view names at the registry level, generic `instance-of`/`index-of` or implementation aliases, is issue #8. Issues #5 and #6 are unchanged.
+- **README:** a level diagram (three nodes, the two views on each edge, `1000` on each node). `examples/` is byte-identical.
+
 ## v0.3.0 — core + profiles; Profile 1 Data-Rendered SVG measured 2026-10-27 at block 973,327
 The repository is renamed `Orbital-Standard`. It now holds a core every Orbital can conform to, plus named profiles, one per kind of Orbital. The DRAFT label stays.
 - **Layout.** `STANDARD.md` is the core. `profiles/` holds what each kind guarantees about its image: `profiles/README.md` says what a profile is and how one is proposed (by PR, with a measured implementation). Reason: Orbitals are made in more than one way, and the image rules of one kind are not the rules of another.

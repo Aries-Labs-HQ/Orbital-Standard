@@ -1,6 +1,6 @@
 # Orbital Standard — a proposal for Alkanes collections
 
-**Draft v0.3.0 · public · MIT · a proposal, not a decree.**
+**Draft v0.4.0 · public · MIT · a proposal, not a decree.**
 
 > **Aries Labs did not create Alkanes, and this document does not speak for the Alkanes project.** It is one team's proposal, published so that others can improve it, adopt it, or argue with it.
 
@@ -18,7 +18,7 @@ Three live Alkanes collections answer the same attributes opcode with three diff
 
 | file | What it covers |
 |---|---|
-| [`STANDARD.md`](STANDARD.md) | **The core.** §0 why · §1 the survey, measured · §2 principles · §3 parent views · §4 the metadata document · §5 attributes · §6 supply · §7 child views · §8 `standards` · §9 honesty section · §10 the second implementation · §11 core conformance |
+| [`STANDARD.md`](STANDARD.md) | **The core.** §0 why · §1 the survey, measured · §2 principles · §3 parent views · §4 the metadata document · §5 attributes · §6 supply · §7 child views · §8 `standards` · §9 honesty section · §10 the second implementation · §11 core conformance · §12 nesting |
 | [`profiles/`](profiles/) | What a profile is and how one is proposed |
 | [`profiles/data-rendered-svg.md`](profiles/data-rendered-svg.md) | **Profile 1 — Data-Rendered SVG Orbitals:** two MUSTs, two OPEN questions, its conformance table |
 | [`profiles/ordinals-backed.md`](profiles/ordinals-backed.md), [`profiles/static-onchain-bytes.md`](profiles/static-onchain-bytes.md) | Placeholders |
@@ -27,15 +27,47 @@ Three live Alkanes collections answer the same attributes opcode with three diff
 
 **Reference implementation: Aries Orbitals**, Aries Labs' own collection: parent `2:98433` on Bitcoin mainnet, deployed at block 968,677, symbol `ARIESORB`. 3,000 pieces. 3,000 offered in the public round — minted out. Each piece is its own supply-1 alkane, created from the template `4:333333` in the transaction that minted it. The document was written from that contract's shipped views and is re-measured against it; where the two disagree, the document moves to the chain.
 
+## How Orbitals nest
+
+A collection proves its pieces from above, and a **registry** proves its collections the same way, one level up ([STANDARD §12](STANDARD.md#12--nesting)). Every node answers `1000` with its own image or cover, and every edge is the same two views, read from the parent down.
+
+```
++---------------------------------+
+|  LEVEL 2 - REGISTRY             |
+|  1000 -> the registry cover     |
++---------------------------------+
+         |  instance-of(index)         -> collection id
+         |  index-of(collection id)    -> membership, index
+         v
++---------------------------------+
+|  LEVEL 1 - COLLECTION           |
+|  1000 -> the collection cover   |
+|  master -> registry id (MAY)    |
++---------------------------------+
+         |  instance-of(index)         -> piece id
+         |  index-of(piece id)         -> membership, index
+         v
++---------------------------------+
+|  LEVEL 0 - PIECE                |
+|  1000 -> its image              |
+|  998 -> collection id (a claim) |
+|  999 -> its index               |
++---------------------------------+
+```
+
+A registry can itself be a member of a higher registry; the three names cover the common case.
+
 ## Status, honestly
 
-- **Draft v0.3.0.** STANDARD §1, §3, §7, Profile 1 and [`examples/`](examples/) are measured from Bitcoin mainnet. How, at which heights and through which reader is written beside each table and in [`examples/MEASURED.md`](examples/MEASURED.md).
+- **Draft v0.4.0.** STANDARD §1, §3, §7, Profile 1 and [`examples/`](examples/) are measured from Bitcoin mainnet. How, at which heights and through which reader is written beside each table and in [`examples/MEASURED.md`](examples/MEASURED.md). STANDARD §12, Nesting, is new in v0.4.0 and not yet measured.
 - **The DRAFT label comes off (v1.0) when a collection conforms to the whole core and one profile, and an independent reader consumes it.** Aries Orbitals meets both MUSTs of Profile 1 but not yet the whole core; STANDARD §9 and §11 say where it falls short. An independent reader is an indexer, wallet or marketplace that Aries Labs does not run.
 - **Profile 1 has two open questions**, each with its own issue. They stay open until a second implementation conforms.
+- **Nesting has one open question**, with its own issue: the view names at the registry level.
 
 ## How input works
 
 - **Weigh in on the two open questions:** [#5 — freeze the renderer at deploy?](https://github.com/Aries-Labs-HQ/Orbital-Standard/issues/5) and [#6 — declare SVG size and image-view fuel bounds?](https://github.com/Aries-Labs-HQ/Orbital-Standard/issues/6)
+- **Weigh in on nesting:** [#8 — view names at the registry level: generic or aliases?](https://github.com/Aries-Labs-HQ/Orbital-Standard/issues/8)
 - **Open an issue** for any other question, disagreement, or hole. Every issue gets an answer.
 - **Send a pull request** for a change to the text. Small, one idea per PR. A new profile arrives as a PR with a measured implementation ([`profiles/`](profiles/)).
 - **Propose something larger** as a file in [`proposals/`](proposals/) — a short document with the problem, the change, and what it breaks. Discussion happens on the PR.
@@ -45,7 +77,7 @@ Three live Alkanes collections answer the same attributes opcode with three diff
 
 ## For readers (indexers, wallets, marketplaces)
 
-Read STANDARD §4 and §7, then the profile the collection names. A conforming piece answers `orbital()` on its own; a conforming parent answers `orbital(index)`, `supply` and `index-of`. Membership is proven by the parent's `index-of`, never by the child's claim. Under Profile 1, a piece's image is a complete SVG that fetches nothing, and it is the same bytes at every height after the mint.
+Read STANDARD §4 and §7, then the profile the collection names. A conforming piece answers `orbital()` on its own; a conforming parent answers `orbital(index)`, `supply` and `index-of`. Membership is proven by the parent's `index-of`, never by the child's claim. Under Profile 1, a piece's image is a complete SVG that fetches nothing, and it is the same bytes at every height after the mint. Collections grouped under a registry are read the same way one level up: the registry's `index-of` proves a collection's membership, and every node's `1000` is its image or cover (STANDARD §12).
 
 ## For collection authors
 

@@ -1,6 +1,6 @@
-# Orbital Standard — the core (draft v0.3.0)
+# Orbital Standard — the core (draft v0.4.0)
 
-**Author: Aries Labs. Reference implementation: Aries Orbitals. Status: DRAFT v0.3.0, PUBLIC PROPOSAL — never a decree.** This file is the **core**: what every Orbital shares, whatever kind it is. How a piece's image is made, and what that kind guarantees about it, is set by the collection's **profile** ([`profiles/`](profiles/)); Profile 1, [Data-Rendered SVG Orbitals](profiles/data-rendered-svg.md), is the kind Aries Orbitals are. §1, §3, §7 and `examples/` are measured from Bitcoin mainnet, and v0.2.1 re-measured every row at block 973,316 (see `examples/MEASURED.md`). The DRAFT label comes off at v1.0, when a collection conforms to the whole core and one profile and an independent reader consumes it — Aries Orbitals does not yet (§9, §11).
+**Author: Aries Labs. Reference implementation: Aries Orbitals. Status: DRAFT v0.4.0, PUBLIC PROPOSAL — never a decree.** This file is the **core**: what every Orbital shares, whatever kind it is. How a piece's image is made, and what that kind guarantees about it, is set by the collection's **profile** ([`profiles/`](profiles/)); Profile 1, [Data-Rendered SVG Orbitals](profiles/data-rendered-svg.md), is the kind Aries Orbitals are. §1, §3, §7 and `examples/` are measured from Bitcoin mainnet, and v0.2.1 re-measured every row at block 973,316 (see `examples/MEASURED.md`). §12, Nesting, is new in v0.4.0 and is written ahead of an implementation; nothing in it is measured. The DRAFT label comes off at v1.0, when a collection conforms to the whole core and one profile and an independent reader consumes it — Aries Orbitals does not yet (§9, §11).
 
 ## 0 · Why this exists
 
@@ -184,7 +184,7 @@ Conformance has two tables: the **core table** below, which every Orbital fills 
 
 - Profile 1, Data-Rendered SVG — [its conformance table](profiles/data-rendered-svg.md#conformance) (Aries Orbitals: MUST 1 ✓, MUST 2 ✓, measured at block 973,327).
 
-The core table is what Aries Orbitals does today against each principle (§2) and each required view, from the measurements above. A second collection copies both tables and fills in its own column.
+The core table is what Aries Orbitals does today against each principle (§2) and each required view, from the measurements above. A second collection copies both tables and fills in its own column. What nesting adds, and what a v0.3.0 collection lacks against it, is listed in §12.
 
 | | requirement | Aries Orbitals (`2:98433`) | measured by |
 |---|---|---|---|
@@ -205,3 +205,68 @@ The core table is what Aries Orbitals does today against each principle (§2) an
 | | one opcode, one meaning, parent and child | **gap:** `1006` is paid-of on the parent and number on the child | §9 |
 
 *Conditions: `bitcoin-mainnet` · `SUBFROST-gateway-anonymous` · `pinned-block-973316` (principle 5 at `pinned-block-969027` and `pinned-block-969028`) · `aries-orbitals-minted-out`.*
+
+## 12 · Nesting
+
+*New in v0.4.0. Like the rest of this document, this section is a proposal; it does not speak for the Alkanes project. It is written ahead of an implementation: nothing in it is measured yet, and its worked example will be added when one exists.*
+
+A collection proves its pieces from above. It says which piece sits at an index, and whether an id is its member (principle 3). Nesting applies the same two views one level up, so that collections can be grouped under a parent of their own. This section names three levels, and the pattern is recursive.
+
+| level | name | what it is | its own `1000` | what it answers about its members |
+|---|---|---|---|---|
+| 0 | **piece** | the orbital child a holder holds | its image | — |
+| 1 | **collection** | a parent of pieces | the collection cover | `instance-of(index)` → piece id · `index-of(piece id)` → membership |
+| 2 | **registry** | a parent of collections | the registry cover | `instance-of(index)` → collection id · `index-of(collection id)` → membership |
+
+### Level 0 — piece
+
+Unchanged from v0.3.0 (§7). A piece answers `998` with its collection's id, `999` with its zero-based index, `1000` with its image bytes, `1001` with the image's content type and `1002` with its attributes array (§5). Its `998` is a claim; its collection's `index-of` is the proof (principle 3).
+
+### Level 1 — collection
+
+A parent of pieces (§3).
+
+- **The two views, unchanged from v0.3.0.** `instance-of(index)` names the piece at an index; `index-of(piece id)` answers membership, with the zero-based index. On Aries Orbitals they are `1010` and `1011` (§3).
+- **The collection cover (new).** A collection SHOULD answer `1000`, called with no argument, with its cover, and `1001` with the cover's content type. The cover comes from a pointer the deployer sets. The pointer MAY mirror a member piece, so that the cover is that piece's `1000`, or it MAY hold bytes of its own. This is the direction of proposal 0001, and it is the gap §9 and §11 record for Aries Orbitals, whose parent's `1000` takes an index.
+- **`master` (new).** A collection MAY carry a set-once field, `master`: the id of the registry it belongs to, in its `standards` answer (§8). With `master` set and the registry's `index-of` confirming the collection, provenance runs both ways. `master` on its own is a claim, as a piece's `998` is.
+
+### Level 2 — registry
+
+A parent of collections.
+
+- **The same two views.** A registry answers `instance-of(index)` with the collection id at an index, and `index-of(collection id)` with membership and the zero-based index.
+- **The registry cover.** A registry SHOULD answer `1000`, called with no argument, with its cover, and `1001` with the cover's content type.
+- **Aliases.** A registry MAY expose implementation aliases for the two views, other names that answer the same, when its profile names them. Whether the generic names are enough at this level is open (below).
+- **A cover pointer per member.** For a member collection that predates this section and has no `1000` of its own, a registry MAY hold a cover pointer: the cover a reader shows for that member. Its profile names the view that answers it.
+- **Adoption.** A registry MAY adopt, at an index, a collection deployed before it. The adoption is proven onchain: the transaction that adopts the collection presents that collection's authority token. Provenance is then one-way: the registry names the collection, and the collection names no registry. A collection deployed after its registry SHOULD set `master`, so that provenance runs both ways.
+
+### Wallet guidance (informative)
+
+- Group pieces under the collection their `998` names, and group collections under a registry by that registry's `index-of`.
+- Take each node's displayed image from its own `1000`: a piece's image, a collection's cover, a registry's cover. For a collection without a `1000`, fall back to its registry's cover pointer for it.
+- Membership is proven from the parent downward, by `index-of`, never from a claim upward. A `998` or a `master` says where to look; the parent's answer is the proof.
+
+### Recursion (informative)
+
+A registry MAY itself be a member of a higher registry, by the same two views. The three names cover the common case; the pattern does not stop at three. In media, for example, an artist is a registry, each release is a collection, and each track is a piece.
+
+### OPEN — view names at the registry level
+
+A registry answers the same two views as a collection. This section names them generically, `instance-of` and `index-of`, at every level, and lets an implementation add aliases that its profile names.
+
+**The case for generic names only.** One walker reads every level: a reader that has integrated a collection's two views has integrated every registry's, at any depth. An alias is a second name for a view the contract already answers, which is the derivable surface principle 6 keeps out. And each implementation's aliases are one more table a reader learns by hand, which is what this proposal exists to remove (§0).
+
+**The case for implementation aliases.** At the registry level the members are collections, not pieces, and a name that says so reads correctly to the people who integrate it. An implementation may already use its own names for these views; aliases let it keep them, and naming them in its profile keeps them discoverable.
+
+**Open question — weigh in: [issue #8](https://github.com/Aries-Labs-HQ/Orbital-Standard/issues/8).** Resolved after input and a first registry implementation.
+
+### Conformance
+
+A v0.3.0 collection without a `1000` of its own remains conformant at v0.4.0: the cover is a SHOULD, and it is new. Against this section, a v0.3.0 collection lacks:
+
+- the collection cover: `1000` called with no argument, and `1001` on the collection;
+- `master`.
+
+It can still join a registry, by adoption at an index, with one-way provenance. The cover a reader shows for it then comes from the registry's cover pointer for it, if the registry holds one.
+
+Aries Orbitals is such a collection: §11's row "collection image with no argument" is the cover's gap.
