@@ -1,10 +1,12 @@
 # Profile 1 — Data-Rendered SVG Orbitals
 
-**Status: part of draft v0.3.0. Written from Aries Orbitals and measured on Bitcoin mainnet at block 973,327.** A collection that conforms to this profile also conforms to the core ([`STANDARD.md`](../STANDARD.md)).
+**Status: part of draft v0.4.0. Written from Aries Orbitals and measured on Bitcoin mainnet at block 973,327.** A collection that conforms to this profile also conforms to the core ([`STANDARD.md`](../STANDARD.md)).
 
 ## Purpose
 
 In a Data-Rendered SVG Orbital the image is a computation, not a file. The collection's own contract draws each piece as an SVG at view time, from data the chain already holds: the piece's seed, its traits and the renderer's code. Nothing is hosted, nothing is fetched, and nothing sits behind a URL; a reader that calls the image view gets the finished picture. This profile states what such a collection guarantees, so that a reader can check it with a byte scan and a comparison of hashes.
+
+**The collection cover.** When a collection's cover ([STANDARD §12](../STANDARD.md#12--nesting)) mirrors a member piece, the cover is that piece's `1000`, byte-for-byte.
 
 ## The two requirements
 
