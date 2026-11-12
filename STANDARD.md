@@ -228,7 +228,7 @@ A parent of pieces (§3).
 
 - **The two views, unchanged from v0.3.0.** `instance-of(index)` names the piece at an index; `index-of(piece id)` answers membership, with the zero-based index. On Aries Orbitals they are `1010` and `1011` (§3).
 - **The collection cover (new).** A collection SHOULD answer `1000`, called with no argument, with its cover, and `1001` with the cover's content type. The cover comes from a pointer the deployer sets. The pointer MAY mirror a member piece, so that the cover is that piece's `1000`, or it MAY hold bytes of its own. This is the direction of proposal 0001, and it is the gap §9 and §11 record for Aries Orbitals, whose parent's `1000` takes an index.
-- **`master` (new).** A collection MAY carry a set-once field, `master`: the id of the registry it belongs to, in its `standards` answer (§8). With `master` set and the registry's `index-of` confirming the collection, provenance runs both ways. `master` on its own is a claim, as a piece's `998` is.
+- **`master` (new).** A collection MAY carry a set-once field, `master`: the id of the registry it belongs to. A collection that carries `master` answers it from a view its profile names; the §8 standards answer is one permitted place. With `master` set and the registry's `index-of` confirming the collection, provenance runs both ways. `master` on its own is a claim, as a piece's `998` is.
 
 ### Level 2 — registry
 
