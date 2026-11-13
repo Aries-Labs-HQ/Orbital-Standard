@@ -2,6 +2,12 @@
 
 All accepted and declined changes, with reasons. Newest first.
 
+## Unreleased — placeholder profile: Block-Derived SVG Orbitals
+A third placeholder joins `profiles/`. Nothing in it is measured, no requirement is added, and no existing collection's conformance changes. The DRAFT label stays.
+- **`profiles/block-derived-svg.md`:** names a kind of Data-Rendered SVG Orbital whose image is drawn from a stored record of one Bitcoin block, and lists what a profile for it would have to guarantee: Profile 1's two MUSTs, the block named from a view, a published derivation that is a pure function of the block, the record readable from a view, and the image a pure function of the record. Reason: in this kind the picture is fixed by the block before the mint, which Profile 1's wording (seed and traits) and core principle 5 do not describe, and a reader can check the stored record against Bitcoin itself, which no other kind offers.
+- **Two questions are stated, not answered:** what a reader does when the record and the block disagree, and how the kind sits with principle 5. Reason: neither can be settled without an implementation.
+- **`profiles/README.md` and `README.md`:** one table row and one sentence, so the placeholder is listed with the other two. `STANDARD.md` and `examples/` are byte-identical.
+
 ## v0.4.0 — nesting (registry → collection → piece) + the collection cover
 A new core section, STANDARD §12 Nesting, names three levels and groups collections under a registry by the same two views a collection answers about its pieces. It is a proposal written ahead of an implementation; nothing in it is measured. The DRAFT label stays.
 - **Level 0, piece:** unchanged from v0.3.0 (`998`, `999`, `1000`, `1001`, `1002`).
