@@ -9,6 +9,7 @@ A collection conforms to the core and to exactly one profile. Its conformance ta
 | [1 · Data-Rendered SVG Orbitals](data-rendered-svg.md) | the image is an SVG the collection's own contract draws from onchain data at view time | written from Aries Orbitals and measured on mainnet |
 | [Ordinals-backed Orbitals](ordinals-backed.md) | the image is composed from Ordinals inscriptions the contract names | placeholder |
 | [Static onchain bytes](static-onchain-bytes.md) | the image is fixed bytes written at deploy or mint and returned unchanged | placeholder |
+| [Block-Derived SVG Orbitals](block-derived-svg.md) | the image is an SVG the contract draws from a stored record of one Bitcoin block, which a reader can recompute from the block | placeholder |
 
 ## Proposing a profile
 

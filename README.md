@@ -6,7 +6,7 @@
 
 This proposal aims at the highest standard for NFTs on Bitcoin. The chain is the authority: image, attributes and provenance are read from the contract, never from a server. A piece is a complete document: the alkane a holder holds answers for itself. Membership is proven by the parent, never claimed by the child. Trait keys are stable: a machine `id` sits beside every display label. Aries Orbitals is the measured reference implementation; every claim made about it here was read from Bitcoin mainnet, and its gaps are listed (STANDARD §9, §11). Aries Honorary will be the second implementation.
 
-Orbitals can be made in more than one way. The **core** ([`STANDARD.md`](STANDARD.md)) is what every kind shares: one metadata document, one attributes array, one supply surface and one membership oracle. A **profile** ([`profiles/`](profiles/)) is what one kind guarantees about its image. **Profile 1, [Data-Rendered SVG Orbitals](profiles/data-rendered-svg.md),** is the kind Aries Orbitals are: the image is an SVG the collection's own contract draws from onchain data. It was written from a live collection and measured on it. Two other kinds, [Ordinals-backed](profiles/ordinals-backed.md) and [Static onchain bytes](profiles/static-onchain-bytes.md), are named as placeholders, and a profile for them, or for a kind not listed, is welcome by PR.
+Orbitals can be made in more than one way. The **core** ([`STANDARD.md`](STANDARD.md)) is what every kind shares: one metadata document, one attributes array, one supply surface and one membership oracle. A **profile** ([`profiles/`](profiles/)) is what one kind guarantees about its image. **Profile 1, [Data-Rendered SVG Orbitals](profiles/data-rendered-svg.md),** is the kind Aries Orbitals are: the image is an SVG the collection's own contract draws from onchain data. It was written from a live collection and measured on it. Three other kinds, [Ordinals-backed](profiles/ordinals-backed.md), [Static onchain bytes](profiles/static-onchain-bytes.md) and [Block-derived SVG](profiles/block-derived-svg.md), are named as placeholders, and a profile for them, or for a kind not listed, is welcome by PR.
 
 *Formerly `Orbital-Metadata-Standard`; GitHub redirects the old address here.*
 
@@ -21,7 +21,7 @@ Three live Alkanes collections answer the same attributes opcode with three diff
 | [`STANDARD.md`](STANDARD.md) | **The core.** §0 why · §1 the survey, measured · §2 principles · §3 parent views · §4 the metadata document · §5 attributes · §6 supply · §7 child views · §8 `standards` · §9 honesty section · §10 the second implementation · §11 core conformance · §12 nesting |
 | [`profiles/`](profiles/) | What a profile is and how one is proposed |
 | [`profiles/data-rendered-svg.md`](profiles/data-rendered-svg.md) | **Profile 1 — Data-Rendered SVG Orbitals:** two MUSTs, two OPEN questions, its conformance table |
-| [`profiles/ordinals-backed.md`](profiles/ordinals-backed.md), [`profiles/static-onchain-bytes.md`](profiles/static-onchain-bytes.md) | Placeholders |
+| [`profiles/ordinals-backed.md`](profiles/ordinals-backed.md), [`profiles/static-onchain-bytes.md`](profiles/static-onchain-bytes.md), [`profiles/block-derived-svg.md`](profiles/block-derived-svg.md) | Placeholders |
 | [`proposals/`](proposals/) | Larger changes under discussion |
 | [`examples/`](examples/) | Chain answers from the reference implementation, verbatim, with how they were read |
 
